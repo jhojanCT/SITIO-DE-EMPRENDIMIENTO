@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresa de Tecnología</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <h1>Bienvenido a Tu Tienda de Tecnología</h1>
+      <p>Descubre los mejores productos y servicios para tu PC. ¡Haz crecer tu experiencia digital con nosotros!</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <section id="services" aria-labelledby="services-heading">
+        <h2 id="services-heading">Nuestros Servicios</h2>
+        <p>Ofrecemos los siguientes servicios para mantener tu PC en óptimas condiciones:</p>
+        <ul id="services-list">
+          <li>Soporte Técnico de PC</li>
+          <li>Optimización de Sistemas</li>
+          <li>Venta de Componentes</li>
+        </ul>
+      </section>
+
+      <section id="add-service" aria-labelledby="add-service-heading">
+        <h2 id="add-service-heading">Añadir Nuevo Servicio</h2>
+        <form id="service-form" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="service-name">Nombre del Servicio:</label>
+            <input type="text" id="service-name" name="service-name" placeholder="Ejemplo: Reparación de Laptop" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="service-description">Descripción:</label>
+            <textarea id="service-description" name="service-description" placeholder="Describe el servicio" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="service-image">Subir Imagen del Servicio:</label>
+            <input type="file" id="service-image" name="image" accept="image/*" required>
+          </div>
+          
+          <button type="submit">Añadir Servicio</button>
+        </form>
+      </section>
+
+      <section id="search-service" aria-labelledby="search-service-heading">
+        <h2 id="search-service-heading">Buscar Servicios</h2>
+        <p>Encuentra rápidamente un servicio que necesites:</p>
+        <input type="text" id="search-bar" placeholder="Buscar servicio..." aria-label="Buscar servicios">
+        <ul id="search-results">
+   
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 Empresa de Tecnología. Todos los derechos reservados.</p>
+      <p>Contacto: <a href="mailto:contacto@tecnologia.com">contacto@tecnologia.com</a></p>
+      <nav>
+        <ul>
+          <li><a href="#services">Servicios</a></li>
+          <li><a href="#add-service">Añadir Servicio</a></li>
+          <li><a href="#search-service">Buscar</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    if (!localStorage.getItem('authToken')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <script src="scripts.js"></script>
+  
+</body>
+</html>

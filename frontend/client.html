@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servicios y Productos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Bienvenido a Nuestra Empresa</h1>
+    <p>Explora nuestros servicios y productos</p>
+  </header>
+  <main class="services-container">
+    <section id="services">
+      <h2>Servicios</h2>
+      <div id="services-list" class="cards-container">
+        <!-- Aquí se inyectarán los servicios dinámicamente -->
+      </div>
+    </section>
+    <section id="products">
+      <h2>Productos</h2>
+      <div id="products-list" class="cards-container">
+        <!-- Aquí se inyectarán los productos dinámicamente -->
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <p>&copy; 2024 Nuestra Empresa. Todos los derechos reservados.</p>
+  </footer>
+  <script>
+    async function fetchData(endpoint, containerId) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/${endpoint}`);
+        if (response.ok) {
+          const data = await response.json();
+          const container = document.getElementById(containerId);
+          data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+              <img src="${item.image_url}" alt="${item.name}" class="card-image">
+              <h3 class="card-title">${item.name}</h3>
+              <p class="card-description">${item.description}</p>
+            `;
+            container.appendChild(card);
+          });
+        } else {
+          console.error(`Error al obtener ${endpoint}`);
+        }
+      } catch (error) {
+        console.error(`Error al conectarse al servidor: ${error}`);
+      }
+    }
+
+    // Cargar servicios y productos al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchData('services', 'services-list');
+      fetchData('products', 'products-list');
+    });
+  </script>
+</body>
+</html>
