@@ -1,112 +1,141 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const apiUrl = "http://localhost:3000/api/services"; // URL del backend
-  const servicesList = document.getElementById("services-list");
-  const searchBar = document.getElementById("search-bar");
-  const searchResults = document.getElementById("search-results");
-  const serviceForm = document.getElementById("service-form");
+document.addEventListener('DOMContentLoaded', function() {
+  const servicesList = document.getElementById('services-list');
+  const componentsList = document.getElementById('components-list');
+  const serviceForm = document.getElementById('service-form');
+  const componentForm = document.getElementById('component-form');
+  const searchService = document.getElementById('search-service');
+  const searchComponent = document.getElementById('search-component');
+  const searchServiceResults = document.getElementById('search-service-results');
+  const searchComponentResults = document.getElementById('search-component-results');
 
-  // 1. Cargar servicios desde el backend
-  function loadServices() {
-    fetch(apiUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Error HTTP! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(services => {
-        console.log("Servicios cargados:", services);
-        displayServices(services);
-      })
-      .catch(error => {
-        console.error("Error al cargar los servicios:", error);
-        servicesList.innerHTML = "<li>Error al cargar los servicios.</li>";
-      });
-  }
+  let services = JSON.parse(localStorage.getItem('services')) || [];
+  let components = JSON.parse(localStorage.getItem('components')) || [];
 
-  // 2. Mostrar servicios en el DOM
-  function displayServices(services) {
-    servicesList.innerHTML = ""; 
-    services.forEach(service => {
-      const li = document.createElement("li");
+  function renderList(items, listElement) {
+    listElement.innerHTML = '';
+    items.forEach((item, index) => {
+      const li = document.createElement('li');
       li.innerHTML = `
-        <div class="service-item">
-          <h3>${service.name}</h3>
-          <p>${service.description}</p>
-          ${
-            service.image_url
-              ? `<img src="${service.image_url}" alt="Imagen de ${service.name}">`
-              : ""
-          }
-        </div>
+        <h3>${item.name}</h3>
+        <p>${item.description}</p>
+        <img src="${item.image}" alt="${item.name}" style="max-width: 200px;">
+        <button onclick="editItem('${item.type}', ${index})">Editar</button>
+        <button onclick="deleteItem('${item.type}', ${index})">Eliminar</button>
       `;
-      servicesList.appendChild(li);
+      listElement.appendChild(li);
     });
   }
 
-  // 3. Añadir un nuevo servicio con imagen
-  serviceForm.addEventListener("submit", event => {
-    event.preventDefault(); 
-    const formData = new FormData(serviceForm); 
-
-    fetch(apiUrl, {
-      method: "POST",
-      body: formData, 
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Error al añadir servicio: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then(service => {
-        console.log("Servicio añadido:", service);
-        loadServices(); 
-        serviceForm.reset(); 
-      })
-      .catch(error => {
-        console.error("Error al añadir servicio:", error);
-        alert("No se pudo añadir el servicio. Inténtalo más tarde.");
-      });
-  });
-
-  // 4. Filtrar servicios en tiempo real
-  searchBar.addEventListener("input", () => {
-    const query = searchBar.value.toLowerCase();
-
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(services => {
-        const filteredServices = services.filter(service =>
-          service.name.toLowerCase().includes(query)
-        );
-        displaySearchResults(filteredServices);
-      })
-      .catch(error => {
-        console.error("Error al buscar servicios:", error);
-      });
-  });
-
-  // Mostrar resultados de búsqueda
-  function displaySearchResults(services) {
-    searchResults.innerHTML = ""; 
-    services.forEach(service => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <div class="search-item">
-          <h4>${service.name}</h4>
-          <p>${service.description}</p>
-          ${
-            service.image_url
-              ? `<img src="${service.image_url}" alt="Imagen de ${service.name}">`
-              : ""
-          }
-        </div>
-      `;
-      searchResults.appendChild(li);
-    });
+  function renderServices() {
+    renderList(services, servicesList);
   }
 
-  // Inicializar
-  loadServices();
+  function renderComponents() {
+    renderList(components, componentsList);
+  }
+
+  function handleFormSubmit(e, type) {
+    e.preventDefault();
+    const form = e.target;
+    const nameInput = form.querySelector(`#${type}-name`);
+    const descriptionInput = form.querySelector(`#${type}-description`);
+    const imageInput = form.querySelector(`#${type}-image`);
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const newItem = {
+        type: type,
+        name: nameInput.value,
+        description: descriptionInput.value,
+        image: event.target.result
+      };
+
+      if (form.dataset.editing) {
+        const index = parseInt(form.dataset.editing);
+        if (type === 'service') {
+          services[index] = newItem;
+        } else {
+          components[index] = newItem;
+        }
+        delete form.dataset.editing;
+      } else {
+        if (type === 'service') {
+          services.push(newItem);
+        } else {
+          components.push(newItem);
+        }
+      }
+
+      localStorage.setItem('services', JSON.stringify(services));
+      localStorage.setItem('components', JSON.stringify(components));
+
+      renderServices();
+      renderComponents();
+      form.reset();
+    };
+
+    reader.readAsDataURL(imageInput.files[0]);
+  }
+
+  serviceForm.addEventListener('submit', (e) => handleFormSubmit(e, 'service'));
+  componentForm.addEventListener('submit', (e) => handleFormSubmit(e, 'component'));
+
+  function search(items, query) {
+    return items.filter(item => 
+      item.name.toLowerCase().includes(query.toLowerCase()) || 
+      item.description.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  searchService.addEventListener('input', function() {
+    const results = search(services, this.value);
+    renderList(results, searchServiceResults);
+  });
+
+  searchComponent.addEventListener('input', function() {
+    const results = search(components, this.value);
+    renderList(results, searchComponentResults);
+  });
+
+  window.editItem = function(type, index) {
+    const item = type === 'service' ? services[index] : components[index];
+    const form = type === 'service' ? serviceForm : componentForm;
+    form.querySelector(`#${type}-name`).value = item.name;
+    form.querySelector(`#${type}-description`).value = item.description;
+    form.dataset.editing = index;
+  };
+
+  window.deleteItem = function(type, index) {
+    if (confirm('¿Estás seguro de que quieres eliminar este item?')) {
+      if (type === 'service') {
+        services.splice(index, 1);
+      } else {
+        components.splice(index, 1);
+      }
+      localStorage.setItem('services', JSON.stringify(services));
+      localStorage.setItem('components', JSON.stringify(components));
+      renderServices();
+      renderComponents();
+    }
+  };
+
+  // Manejo de pestañas
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tabId = button.getAttribute('data-tab');
+      
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+
+      button.classList.add('active');
+      document.getElementById(`${tabId}-tab`).classList.add('active');
+    });
+  });
+
+  renderServices();
+  renderComponents();
 });
+
