@@ -11,6 +11,14 @@ const app = express();
 const PORT = 3000;
 const SECRET_KEY = "root";
 
+// Servir archivos estáticos del frontend
+app.use(express.static(path.join(__dirname, '../Frontend')));
+
+// Asegúrate de que las rutas estén al final de las configuraciones de las rutas
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend', 'index.html'));
+});
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -62,6 +70,19 @@ app.post("/api/login", async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 });
+
+// Middleware para verificar el token
+function authenticateToken(req, res, next) {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Acceso denegado" });
+
+  jwt.verify(token, SECRET_KEY, (err, user) => {
+    if (err) return res.status(403).json({ error: "Token inválido" });
+    req.user = user;
+    next();
+  });
+}
+
 
 // Obtener todos los servicios
 app.get("/api/services", async (req, res) => {

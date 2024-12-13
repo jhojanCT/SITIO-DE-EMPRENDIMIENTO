@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Tienda de tecnología con servicios y componentes para mejorar tu experiencia digital.">
+  <meta name="keywords" content="tecnología, servicios, componentes, PC">
 </head>
 <body>
 
@@ -25,87 +27,47 @@
         <button class="tab-button" data-tab="components">Componentes</button>
       </div>
 
-      <div class="tab-content active" id="services-tab">
-        <section id="services" aria-labelledby="services-heading">
-          <h2 id="services-heading">Nuestros Servicios</h2>
-          <p>Ofrecemos los siguientes servicios para mantener tu PC en óptimas condiciones:</p>
-          <ul id="services-list">
-            <!-- Los servicios se cargarán dinámicamente aquí -->
-          </ul>
-        </section>
+      <section id="services" aria-labelledby="services-heading">
+        <h2 id="services-heading">Nuestros Servicios</h2>
+        <p>Ofrecemos los siguientes servicios para mantener tu PC en óptimas condiciones:</p>
+        <ul id="services-list">
+          <li>Soporte Técnico de PC</li>
+          <li>Optimización de Sistemas</li>
+          <li>Venta de Componentes</li>
+        </ul>
+      </section>
 
-        <section id="add-service" aria-labelledby="add-service-heading">
-          <h2 id="add-service-heading">Añadir Nuevo Servicio</h2>
-          <form id="service-form" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="service-name">Nombre del Servicio:</label>
-              <input type="text" id="service-name" name="service-name" placeholder="Ejemplo: Reparación de Laptop" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="service-description">Descripción:</label>
-              <textarea id="service-description" name="service-description" placeholder="Describe el servicio" required></textarea>
-            </div>
+      <section id="add-service" aria-labelledby="add-service-heading">
+        <h2 id="add-service-heading">Añadir Nuevo Servicio</h2>
+        <form id="service-form" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="service-name">Nombre del Servicio:</label>
+            <input type="text" id="service-name" name="service-name" placeholder="Ejemplo: Reparación de Laptop" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="service-description">Descripción:</label>
+            <textarea id="service-description" name="service-description" placeholder="Describe el servicio" required></textarea>
+          </div>
 
-            <div class="form-group">
-              <label for="service-image">Subir Imagen del Servicio:</label>
-              <input type="file" id="service-image" name="image" accept="image/*" required>
-            </div>
-            
-            <button type="submit">Añadir Servicio</button>
-          </form>
-        </section>
+          <div class="form-group">
+            <label for="service-image">Subir Imagen del Servicio:</label>
+            <input type="file" id="service-image" name="image" accept="image/*" required>
+          </div>
+          
+          <button type="submit">Añadir Servicio</button>
+        </form>
+      </section>
 
-        <section id="search-service" aria-labelledby="search-service-heading">
-          <h2 id="search-service-heading">Buscar Servicios</h2>
-          <p>Encuentra rápidamente un servicio que necesites:</p>
-          <input type="text" id="search-service" placeholder="Buscar servicio..." aria-label="Buscar servicios">
-          <ul id="search-service-results">
-            <!-- Los resultados de búsqueda de servicios se cargarán aquí -->
-          </ul>
-        </section>
-      </div>
+      <section id="search-service" aria-labelledby="search-service-heading">
+        <h2 id="search-service-heading">Buscar Servicios</h2>
+        <p>Encuentra rápidamente un servicio que necesites:</p>
+        <input type="text" id="search-bar" placeholder="Buscar servicio..." aria-label="Buscar servicios">
+        <ul id="search-results">
+   
+        </ul>
+      </section>
 
-      <div class="tab-content" id="components-tab">
-        <section id="components" aria-labelledby="components-heading">
-          <h2 id="components-heading">Nuestros Componentes</h2>
-          <p>Explora nuestra selección de componentes de alta calidad:</p>
-          <ul id="components-list">
-            <!-- Los componentes se cargarán dinámicamente aquí -->
-          </ul>
-        </section>
-
-        <section id="add-component" aria-labelledby="add-component-heading">
-          <h2 id="add-component-heading">Añadir Nuevo Componente</h2>
-          <form id="component-form" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="component-name">Nombre del Componente:</label>
-              <input type="text" id="component-name" name="component-name" placeholder="Ejemplo: Tarjeta Gráfica NVIDIA RTX 3080" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="component-description">Descripción:</label>
-              <textarea id="component-description" name="component-description" placeholder="Describe el componente" required></textarea>
-            </div>
-
-            <div class="form-group">
-              <label for="component-image">Subir Imagen del Componente:</label>
-              <input type="file" id="component-image" name="image" accept="image/*" required>
-            </div>
-            
-            <button type="submit">Añadir Componente</button>
-          </form>
-        </section>
-
-        <section id="search-component" aria-labelledby="search-component-heading">
-          <h2 id="search-component-heading">Buscar Componentes</h2>
-          <p>Encuentra rápidamente un componente que necesites:</p>
-          <input type="text" id="search-component" placeholder="Buscar componente..." aria-label="Buscar componentes">
-          <ul id="search-component-results">
-            <!-- Los resultados de búsqueda de componentes se cargarán aquí -->
-          </ul>
-        </section>
-      </div>
     </div>
   </main>
 
@@ -113,16 +75,149 @@
     <div class="container">
       <p>&copy; 2024 Empresa de Tecnología. Todos los derechos reservados.</p>
       <p>Contacto: <a href="mailto:contacto@tecnologia.com">contacto@tecnologia.com</a></p>
-     
+      <nav>
+        <ul>
+          <li><a href="#services">Servicios</a></li>
+          <li><a href="#add-service">Añadir Servicio</a></li>
+          <li><a href="#search-service">Buscar</a></li>
+        </ul>
+      </nav>
+    </div>
   </footer>
 
   <script>
+    // Redirección a login si no hay authToken
     if (!localStorage.getItem('authToken')) {
       window.location.href = 'login.html';
     }
-  </script>
 
-  <script src="scripts.js"></script>
-  
+    // Mostrar u ocultar las pestañas
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const targetTab = this.getAttribute('data-tab');
+        
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+
+        tabContents.forEach(content => {
+          content.style.display = content.id === targetTab ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Función para cargar los servicios desde la API
+    async function loadServices() {
+      const servicesList = document.getElementById('services-list');
+      servicesList.innerHTML = '<p>Cargando servicios...</p>';
+
+      try {
+        const response = await fetch('http://localhost:3000/api/services');
+        const services = await response.json();
+        
+        servicesList.innerHTML = '';
+        services.forEach(service => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <h3>${service.name}</h3>
+            <img src="${service.image_url}" alt="${service.name}" class="service-image">
+            <p>${service.description}</p>
+          `;
+          servicesList.appendChild(li);
+        });
+      } catch (error) {
+        servicesList.innerHTML = '<p>Error al cargar los servicios. Por favor, intenta de nuevo más tarde.</p>';
+        console.error('Error al cargar los servicios:', error);
+      }
+    }
+
+    // Función para cargar los componentes desde la API
+    async function loadComponents() {
+      const componentsList = document.getElementById('components-list');
+      componentsList.innerHTML = '<p>Cargando componentes...</p>';
+
+      try {
+        const response = await fetch('http://localhost:3000/api/components');
+        const components = await response.json();
+        
+        componentsList.innerHTML = '';
+        components.forEach(component => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <h3>${component.name}</h3>
+            <img src="${component.image_url}" alt="${component.name}" class="component-image">
+            <p>${component.description}</p>
+          `;
+          componentsList.appendChild(li);
+        });
+      } catch (error) {
+        componentsList.innerHTML = '<p>Error al cargar los componentes. Por favor, intenta de nuevo más tarde.</p>';
+        console.error('Error al cargar los componentes:', error);
+      }
+    }
+
+    // Función para manejar el envío del formulario de servicios
+    document.getElementById('service-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const message = document.getElementById('form-message');
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: formData
+        });
+
+        if (response.ok) {
+          message.textContent = 'Servicio añadido exitosamente.';
+          message.style.color = 'green';
+          form.reset();
+          loadServices();
+        } else {
+          throw new Error('Error al añadir el servicio.');
+        }
+      } catch (error) {
+        message.textContent = error.message;
+        message.style.color = 'red';
+      }
+    });
+
+    // Función para manejar el envío del formulario de componentes
+    document.getElementById('component-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const message = document.getElementById('component-form-message');
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: formData
+        });
+
+        if (response.ok) {
+          message.textContent = 'Componente añadido exitosamente.';
+          message.style.color = 'green';
+          form.reset();
+          loadComponents();
+        } else {
+          throw new Error('Error al añadir el componente.');
+        }
+      } catch (error) {
+        message.textContent = error.message;
+        message.style.color = 'red';
+      }
+    });
+
+    // Cargar servicios y componentes al inicio
+    window.addEventListener('DOMContentLoaded', function() {
+      loadServices();
+      loadComponents();
+    });
+  </script> 
+
 </body>
 </html>
