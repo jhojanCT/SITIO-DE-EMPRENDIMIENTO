@@ -16,12 +16,15 @@
     <div class="container">
       <h1>Bienvenido a Nuestra Empresa</h1>
       <p>Explora nuestros servicios y productos diseñados para ti.</p>
+      <div class="cart">
+        <button id="cart-button">Carrito (0)</button>
+      </div>
     </div>
   </header>
 
   <nav class="tabs">
     <button class="tab-button active" data-tab="services">Servicios</button>
-    <button class="tab-button" data-tab="components">components</button>
+    <button class="tab-button" data-tab="components">Componentes</button>
   </nav>
 
   <main class="main-container">
@@ -33,11 +36,22 @@
       </div>
     </section>
 
-    <!-- Sección de Productos -->
+    <!-- Sección de Componentes -->
     <section id="components" class="tab-content">
-      <h2>Nuestros componentes</h2>
+      <h2>Nuestros Componentes</h2>
       <div id="components-list" class="cards-container">
         <!-- Los productos se inyectarán aquí -->
+      </div>
+    </section>
+
+    <!-- Sección del Carrito -->
+    <section id="cart" class="tab-content">
+      <h2>Tu Carrito</h2>
+      <div id="cart-items" class="cards-container">
+        <!-- Los productos del carrito se inyectarán aquí -->
+      </div>
+      <div id="cart-total">
+        <p>Total: $<span id="total-amount">0</span></p>
       </div>
     </section>
   </main>
@@ -50,6 +64,9 @@
   </footer>
 
   <script>
+    let cart = [];
+    let totalAmount = 0;
+
     // Función para cargar datos (servicios o componentes) desde la API
     async function fetchData(endpoint, containerId) {
       try {
@@ -65,9 +82,12 @@
               <img src="${item.image_url}" alt="${item.name}" class="card-image">
               <h3 class="card-title">${item.name}</h3>
               <p class="card-description">${item.description}</p>
+              <p class="card-price">$${item.price}</p>
+              <button class="add-to-cart" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}">Agregar al carrito</button>
             `;
             container.appendChild(card);
           });
+          addEventListenersToAddButtons(); // Agregar los event listeners para los botones
         } else {
           console.error(`Error al obtener ${endpoint}`);
         }
@@ -76,7 +96,60 @@
       }
     }
 
-    // Cambiar entre las pestañas de Servicios y Productos
+    // Función para agregar productos al carrito
+    function addToCart(product) {
+      cart.push(product);
+      totalAmount += product.price;
+      updateCart();
+    }
+
+    // Actualizar el carrito en el UI
+    function updateCart() {
+      const cartButton = document.getElementById('cart-button');
+      const cartItemsContainer = document.getElementById('cart-items');
+      const totalAmountElement = document.getElementById('total-amount');
+
+      // Actualizar el número de productos en el carrito
+      cartButton.textContent = `Carrito (${cart.length})`;
+
+      // Mostrar los productos del carrito
+      cartItemsContainer.innerHTML = ''; // Limpiar el carrito
+      cart.forEach(item => {
+        const cartItem = document.createElement('div');
+        cartItem.className = 'card';
+        cartItem.innerHTML = `
+          <h3 class="card-title">${item.name}</h3>
+          <p class="card-price">$${item.price}</p>
+        `;
+        cartItemsContainer.appendChild(cartItem);
+      });
+
+      // Actualizar el total del carrito
+      totalAmountElement.textContent = totalAmount.toFixed(2);
+    }
+
+    // Función para mostrar/ocultar el carrito
+    function toggleCart() {
+      const cartSection = document.getElementById('cart');
+      cartSection.classList.toggle('active'); // Alterna la visibilidad del carrito
+    }
+
+    // Agregar event listeners a los botones de "Agregar al carrito"
+    function addEventListenersToAddButtons() {
+      const addToCartButtons = document.querySelectorAll('.add-to-cart');
+      addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const product = {
+            id: button.getAttribute('data-id'),
+            name: button.getAttribute('data-name'),
+            price: parseFloat(button.getAttribute('data-price'))
+          };
+          addToCart(product);
+        });
+      });
+    }
+
+    // Cambiar entre las pestañas de Servicios, Componentes y Carrito
     const tabButtons = document.querySelectorAll('.tab-button');
     tabButtons.forEach(button => {
       button.addEventListener('click', () => {
@@ -96,6 +169,10 @@
         });
       });
     });
+
+    // Al hacer clic en el carrito, mostrar/ocultar la sección del carrito
+    const cartButton = document.getElementById('cart-button');
+    cartButton.addEventListener('click', toggleCart);
 
     // Cargar servicios y productos al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
