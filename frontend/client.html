@@ -21,7 +21,7 @@
 
   <nav class="tabs">
     <button class="tab-button active" data-tab="services">Servicios</button>
-    <button class="tab-button" data-tab="products">Productos</button>
+    <button class="tab-button" data-tab="components">components</button>
   </nav>
 
   <main class="main-container">
@@ -34,9 +34,9 @@
     </section>
 
     <!-- Sección de Productos -->
-    <section id="products" class="tab-content">
-      <h2>Nuestros Productos</h2>
-      <div id="products-list" class="cards-container">
+    <section id="components" class="tab-content">
+      <h2>Nuestros componentes</h2>
+      <div id="components-list" class="cards-container">
         <!-- Los productos se inyectarán aquí -->
       </div>
     </section>
@@ -50,7 +50,7 @@
   </footer>
 
   <script>
-    // Función para cargar datos (servicios o productos) desde la API
+    // Función para cargar datos (servicios o componentes) desde la API
     async function fetchData(endpoint, containerId) {
       try {
         const response = await fetch(`http://localhost:3000/api/${endpoint}`);
@@ -100,7 +100,7 @@
     // Cargar servicios y productos al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       fetchData('services', 'services-list');
-      fetchData('products', 'products-list');
+      fetchData('components', 'components-list');
     });
   </script>
   <script src="scripts.js"></script>
