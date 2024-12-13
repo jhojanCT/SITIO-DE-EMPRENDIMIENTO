@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Tienda de tecnología con servicios y componentes para mejorar tu experiencia digital.">
+  <meta name="keywords" content="tecnología, servicios, componentes, PC">
 </head>
 <body>
 
@@ -20,20 +22,29 @@
 
   <main>
     <div class="container">
+      <div class="tabs">
+        <button class="tab-button active" data-tab="services">Servicios</button>
+        <button class="tab-button" data-tab="components">Componentes</button>
+      </div>
 
-      <section id="services" aria-labelledby="services-heading">
+      <!-- Sección de Servicios -->
+      <section id="services" class="tab-content" aria-labelledby="services-heading">
         <h2 id="services-heading">Nuestros Servicios</h2>
         <p>Ofrecemos los siguientes servicios para mantener tu PC en óptimas condiciones:</p>
-        <ul id="services-list">
-          <li>Soporte Técnico de PC</li>
-          <li>Optimización de Sistemas</li>
-          <li>Venta de Componentes</li>
-        </ul>
+        <ul id="services-list"></ul>
       </section>
 
+      <!-- Sección de Componentes -->
+      <section id="components" class="tab-content" aria-labelledby="components-heading" style="display:none;">
+        <h2 id="components-heading">Componentes Disponibles</h2>
+        <p>Consulta los mejores componentes para tu PC:</p>
+        <ul id="components-list"></ul>
+      </section>
+
+      <!-- Añadir nuevo servicio -->
       <section id="add-service" aria-labelledby="add-service-heading">
         <h2 id="add-service-heading">Añadir Nuevo Servicio</h2>
-        <form id="service-form" enctype="multipart/form-data">
+        <form id="service-form" action="http://localhost:3000/api/services" method="POST" enctype="multipart/form-data"> 
           <div class="form-group">
             <label for="service-name">Nombre del Servicio:</label>
             <input type="text" id="service-name" name="service-name" placeholder="Ejemplo: Reparación de Laptop" required>
@@ -51,17 +62,40 @@
           
           <button type="submit">Añadir Servicio</button>
         </form>
+        <div id="form-message"></div>
       </section>
 
+      <!-- Añadir nuevo componente -->
+      <section id="add-component" aria-labelledby="add-component-heading">
+        <h2 id="add-component-heading">Añadir Nuevo Componente</h2>
+        <form id="component-form" action="http://localhost:3000/api/components" method="POST" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="component-name">Nombre del Componente:</label>
+            <input type="text" id="component-name" name="component-name" placeholder="Ejemplo: Tarjeta Gráfica" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="component-description">Descripción:</label>
+            <textarea id="component-description" name="component-description" placeholder="Describe el componente" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="component-image">Subir Imagen del Componente:</label>
+            <input type="file" id="component-image" name="image" accept="image/*" required>
+          </div>
+          
+          <button type="submit">Añadir Componente</button>
+        </form>
+        <div id="component-form-message"></div>
+      </section>
+
+      <!-- Buscar servicio o componente -->
       <section id="search-service" aria-labelledby="search-service-heading">
-        <h2 id="search-service-heading">Buscar Servicios</h2>
-        <p>Encuentra rápidamente un servicio que necesites:</p>
-        <input type="text" id="search-bar" placeholder="Buscar servicio..." aria-label="Buscar servicios">
-        <ul id="search-results">
-   
-        </ul>
+        <h2 id="search-service-heading">Buscar</h2>
+        <p>Encuentra rápidamente un servicio o componente que necesites:</p>
+        <input type="text" id="search-bar" placeholder="Buscar..." aria-label="Buscar">
+        <ul id="search-results"></ul>
       </section>
-
     </div>
   </main>
 
@@ -73,6 +107,7 @@
         <ul>
           <li><a href="#services">Servicios</a></li>
           <li><a href="#add-service">Añadir Servicio</a></li>
+          <li><a href="#add-component">Añadir Componente</a></li>
           <li><a href="#search-service">Buscar</a></li>
         </ul>
       </nav>
@@ -80,12 +115,138 @@
   </footer>
 
   <script>
+    // Redirección a login si no hay authToken
     if (!localStorage.getItem('authToken')) {
       window.location.href = 'login.html';
     }
-  </script>
 
-  <script src="scripts.js"></script>
-  
+    // Mostrar u ocultar las pestañas
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const targetTab = this.getAttribute('data-tab');
+        
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+
+        tabContents.forEach(content => {
+          content.style.display = content.id === targetTab ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Función para cargar los servicios desde la API
+    async function loadServices() {
+      const servicesList = document.getElementById('services-list');
+      servicesList.innerHTML = '<p>Cargando servicios...</p>';
+
+      try {
+        const response = await fetch('http://localhost:3000/api/services');
+        const services = await response.json();
+        
+        servicesList.innerHTML = '';
+        services.forEach(service => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <h3>${service.name}</h3>
+            <img src="${service.image_url}" alt="${service.name}" class="service-image">
+            <p>${service.description}</p>
+          `;
+          servicesList.appendChild(li);
+        });
+      } catch (error) {
+        servicesList.innerHTML = '<p>Error al cargar los servicios. Por favor, intenta de nuevo más tarde.</p>';
+        console.error('Error al cargar los servicios:', error);
+      }
+    }
+
+    // Función para cargar los componentes desde la API
+    async function loadComponents() {
+      const componentsList = document.getElementById('components-list');
+      componentsList.innerHTML = '<p>Cargando componentes...</p>';
+
+      try {
+        const response = await fetch('http://localhost:3000/api/components');
+        const components = await response.json();
+        
+        componentsList.innerHTML = '';
+        components.forEach(component => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <h3>${component.name}</h3>
+            <img src="${component.image_url}" alt="${component.name}" class="component-image">
+            <p>${component.description}</p>
+          `;
+          componentsList.appendChild(li);
+        });
+      } catch (error) {
+        componentsList.innerHTML = '<p>Error al cargar los componentes. Por favor, intenta de nuevo más tarde.</p>';
+        console.error('Error al cargar los componentes:', error);
+      }
+    }
+
+    // Función para manejar el envío del formulario de servicios
+    document.getElementById('service-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const message = document.getElementById('form-message');
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: formData
+        });
+
+        if (response.ok) {
+          message.textContent = 'Servicio añadido exitosamente.';
+          message.style.color = 'green';
+          form.reset();
+          loadServices();
+        } else {
+          throw new Error('Error al añadir el servicio.');
+        }
+      } catch (error) {
+        message.textContent = error.message;
+        message.style.color = 'red';
+      }
+    });
+
+    // Función para manejar el envío del formulario de componentes
+    document.getElementById('component-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const message = document.getElementById('component-form-message');
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: formData
+        });
+
+        if (response.ok) {
+          message.textContent = 'Componente añadido exitosamente.';
+          message.style.color = 'green';
+          form.reset();
+          loadComponents();
+        } else {
+          throw new Error('Error al añadir el componente.');
+        }
+      } catch (error) {
+        message.textContent = error.message;
+        message.style.color = 'red';
+      }
+    });
+
+    // Cargar servicios y componentes al inicio
+    window.addEventListener('DOMContentLoaded', function() {
+      loadServices();
+      loadComponents();
+    });
+  </script> 
+
 </body>
 </html>

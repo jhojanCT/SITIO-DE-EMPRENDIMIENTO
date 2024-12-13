@@ -1,40 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Servicios y Productos</title>
   <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
+
 <body>
   <header class="header">
-    <h1>Bienvenido a Nuestra Empresa</h1>
-    <p>Explora nuestros servicios y productos</p>
+    <div class="container">
+      <h1>Bienvenido a Nuestra Empresa</h1>
+      <p>Explora nuestros servicios y productos diseñados para ti.</p>
+    </div>
   </header>
-  <main class="services-container">
-    <section id="services">
-      <h2>Servicios</h2>
+
+  <nav class="tabs">
+    <button class="tab-button active" data-tab="services">Servicios</button>
+    <button class="tab-button" data-tab="products">Productos</button>
+  </nav>
+
+  <main class="main-container">
+    <!-- Sección de Servicios -->
+    <section id="services" class="tab-content active">
+      <h2>Nuestros Servicios</h2>
       <div id="services-list" class="cards-container">
-        <!-- Aquí se inyectarán los servicios dinámicamente -->
+        <!-- Los servicios se inyectarán aquí -->
       </div>
     </section>
-    <section id="products">
-      <h2>Productos</h2>
+
+    <!-- Sección de Productos -->
+    <section id="products" class="tab-content">
+      <h2>Nuestros Productos</h2>
       <div id="products-list" class="cards-container">
-        <!-- Aquí se inyectarán los productos dinámicamente -->
+        <!-- Los productos se inyectarán aquí -->
       </div>
     </section>
   </main>
+
   <footer class="footer">
-    <p>&copy; 2024 Nuestra Empresa. Todos los derechos reservados.</p>
+    <div class="container">
+      <p>&copy; 2024 Nuestra Empresa. Todos los derechos reservados.</p>
+      <p>Contacto: <a href="mailto:contacto@nuestraempresa.com">contacto@nuestraempresa.com</a></p>
+    </div>
   </footer>
+
   <script>
+    // Función para cargar datos (servicios o productos) desde la API
     async function fetchData(endpoint, containerId) {
       try {
         const response = await fetch(`http://localhost:3000/api/${endpoint}`);
         if (response.ok) {
           const data = await response.json();
           const container = document.getElementById(containerId);
+          container.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevos elementos
           data.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card';
@@ -53,11 +76,35 @@
       }
     }
 
+    // Cambiar entre las pestañas de Servicios y Productos
+    const tabButtons = document.querySelectorAll('.tab-button');
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+
+        // Actualizar las pestañas activas
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Mostrar el contenido correspondiente
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => {
+          content.classList.remove('active');
+          if (content.id === targetTab) {
+            content.classList.add('active');
+          }
+        });
+      });
+    });
+
     // Cargar servicios y productos al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       fetchData('services', 'services-list');
       fetchData('products', 'products-list');
     });
   </script>
+  <script src="scripts.js"></script>
+
 </body>
+
 </html>

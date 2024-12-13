@@ -16,7 +16,7 @@ CREATE TABLE users (
 
 INSERT INTO users (username, password, role)
 VALUES 
-  ('admin', '$2a$10$R5vE7nK8AfTzGh50gkkBSZceMwBfU07JPO3jDJQmh0kgyhFzKjbEm', 'admin'); 
+  ('admin', '$2a$10$vy7StIYbHe8vjVurcPVTPe5Widu2T.IOo8Un12L3GvJwlceh2TnSG', 'admin'); 
 
 -- Crear la tabla de servicios
 CREATE TABLE services (
@@ -55,3 +55,38 @@ CREATE TRIGGER update_services_timestamp
 
 
 CREATE INDEX idx_services_name ON services (LOWER(name));
+
+-- Crear la tabla de componentes
+CREATE TABLE components (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  image_url VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insertar algunos componentes de ejemplo
+INSERT INTO components (name, description, price, stock_quantity)
+VALUES 
+  ('Procesador Intel i7', 'Procesador de 8 núcleos y 16 hilos, ideal para juegos y tareas de alto rendimiento.', 300.00, 50),
+  ('Tarjeta Gráfica Nvidia RTX 3060', 'Tarjeta gráfica de alto rendimiento para juegos y edición de video.', 500.00, 30),
+  ('Placa Base ASUS B450', 'Placa base compatible con procesadores AMD Ryzen, ideal para gamers y entusiastas.', 120.00, 40);
+
+-- Crear una función para actualizar la fecha de actualización
+CREATE OR REPLACE FUNCTION update_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Crear un trigger para actualizar el timestamp de los componentes
+CREATE TRIGGER update_components_timestamp
+  BEFORE UPDATE ON components
+  FOR EACH ROW
+  EXECUTE FUNCTION update_timestamp();
+
+-- Crear un índice para optimizar la búsqueda por nombre de componente
+CREATE INDEX idx_components_name ON components (LOWER(name));

@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, '../Frontend')));
 
 // Asegúrate de que las rutas estén al final de las configuraciones de las rutas
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../Frontend', 'index.html'));
+  res.sendFile(path.join(__dirname, '../Frontend', 'login.html'));
 });
 
 // Middleware
@@ -67,6 +67,83 @@ function authenticateToken(req, res, next) {
   });
 }
 
+// Obtener todos los componentes
+app.get("/api/components", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM components");
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error al obtener componentes:", error);
+    res.status(500).json({ error: "Error al obtener los componentes" });
+  }
+});
+
+// Añadir un nuevo componente (solo nombre, descripción e imagen)
+app.post("/api/components", upload.single("image"), async (req, res) => {
+  try {
+    const name = req.body['component-name'];
+    const description = req.body['component-description'];
+    const image_url = req.file
+      ? `http://localhost:${PORT}/uploads/${req.file.filename}`
+      : null;
+
+    if (!name || !description) {
+      return res.status(400).json({ error: "Nombre y descripción son requeridos" });
+    }
+
+    const result = await pool.query(
+      "INSERT INTO components (name, description, image_url) VALUES ($1, $2, $3) RETURNING *",
+      [name, description, image_url]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error al añadir componente:", error);
+    res.status(500).json({ error: "Error al añadir el componente" });
+  }
+});
+
+// Actualizar un componente existente
+app.put("/api/components/:id", upload.single("image"), async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { name, description } = req.body;
+    const image_url = req.file
+      ? `http://localhost:${PORT}/uploads/${req.file.filename}`
+      : null;
+
+    const result = await pool.query(
+      "UPDATE components SET name = $1, description = $2, image_url = $3 WHERE id = $4 RETURNING *",
+      [name, description, image_url, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Componente no encontrado" });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error al actualizar componente:", error);
+    res.status(500).json({ error: "Error al actualizar el componente" });
+  }
+});
+
+// Eliminar un componente
+app.delete("/api/components/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query("DELETE FROM components WHERE id = $1 RETURNING *", [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Componente no encontrado" });
+    }
+
+    res.status(200).json({ message: "Componente eliminado con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar componente:", error);
+    res.status(500).json({ error: "Error al eliminar el componente" });
+  }
+});
 
 // Obtener todos los servicios
 app.get("/api/services", async (req, res) => {
