@@ -1,0 +1,167 @@
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f9f9;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font-weight: 700;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  /* Header */
+  .header {
+    background-color: #0078d7;
+    color: #fff;
+    padding: 2rem 0;
+    text-align: center;
+  }
+  
+  .header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .header p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .cart button {
+    background-color: #fff;
+    color: #0078d7;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .cart button:hover {
+    background-color: #e6e6e6;
+  }
+  
+  /* Tabs */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    background-color: #f1f1f1;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .tab-button {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s;
+  }
+  
+  .tab-button.active {
+    border-bottom: 2px solid #0078d7;
+    color: #0078d7;
+  }
+  
+  .tab-button:hover {
+    color: #0078d7;
+  }
+  
+  /* Main Content */
+  .main-container {
+    padding: 2rem 0;
+  }
+  
+  .tab-content {
+    display: none;
+    padding: 1rem 0;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid #0078d7;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+  }
+  
+  .card-description {
+    font-size: 1rem;
+    color: #666;
+    margin: 0.5rem 0;
+  }
+  
+  .card-price {
+    font-size: 1.2rem;
+    color: #0078d7;
+    font-weight: 700;
+    margin: 0.5rem 0;
+  }
+  
+  .add-to-cart {
+    background-color: #0078d7;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-to-cart:hover {
+    background-color: #005bb5;
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+  }
+  
+  .footer a {
+    color: #0078d7;
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  

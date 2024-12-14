@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Servicios y Productos</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="cliente.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
@@ -104,35 +104,46 @@
     }
 
     // Actualizar el carrito en el UI
-    function updateCart() {
-      const cartButton = document.getElementById('cart-button');
-      const cartItemsContainer = document.getElementById('cart-items');
-      const totalAmountElement = document.getElementById('total-amount');
+// Actualizar el carrito en el UI
+function updateCart() {
+  const cartButton = document.getElementById('cart-button');
+  const cartItemsContainer = document.getElementById('cart-items');
+  const totalAmountElement = document.getElementById('total-amount');
 
-      // Actualizar el número de productos en el carrito
-      cartButton.textContent = `Carrito (${cart.length})`;
+  // Actualizar el número de productos en el carrito
+  cartButton.textContent = `Carrito (${cart.length})`;
 
-      // Mostrar los productos del carrito
-      cartItemsContainer.innerHTML = ''; // Limpiar el carrito
-      cart.forEach(item => {
-        const cartItem = document.createElement('div');
-        cartItem.className = 'card';
-        cartItem.innerHTML = `
-          <h3 class="card-title">${item.name}</h3>
-          <p class="card-price">$${item.price}</p>
-        `;
-        cartItemsContainer.appendChild(cartItem);
-      });
+  // Mostrar los productos del carrito
+  cartItemsContainer.innerHTML = ''; // Limpiar el carrito
+  if (cart.length === 0) {
+    cartItemsContainer.innerHTML = '<p>El carrito está vacío.</p>';
+  } else {
+    cart.forEach(item => {
+      const cartItem = document.createElement('div');
+      cartItem.className = 'card';
+      cartItem.innerHTML = `
+        <h3 class="card-title">${item.name}</h3>
+        <p class="card-price">$${item.price.toFixed(2)}</p>
+      `;
+      cartItemsContainer.appendChild(cartItem);
+    });
+  }
 
-      // Actualizar el total del carrito
-      totalAmountElement.textContent = totalAmount.toFixed(2);
-    }
+  // Actualizar el total del carrito
+  totalAmountElement.textContent = totalAmount.toFixed(2);
+}
 
-    // Función para mostrar/ocultar el carrito
-    function toggleCart() {
-      const cartSection = document.getElementById('cart');
-      cartSection.classList.toggle('active'); // Alterna la visibilidad del carrito
-    }
+// Función para mostrar/ocultar el carrito
+function toggleCart() {
+  const cartSection = document.getElementById('cart');
+  const otherSections = document.querySelectorAll('.tab-content');
+
+  // Ocultar todas las secciones y mostrar solo el carrito
+  otherSections.forEach(section => section.classList.remove('active'));
+  cartSection.classList.add('active');
+}
+
+
 
     // Agregar event listeners a los botones de "Agregar al carrito"
     function addEventListenersToAddButtons() {

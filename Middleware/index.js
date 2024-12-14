@@ -217,6 +217,23 @@ app.get("/api/services/search", async (req, res) => {
 
 // Proteger las rutas
 app.use("/api/services", authenticateToken);
+// Rutas protegidas
+app.delete("/api/services/:id", authenticateToken, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query("DELETE FROM services WHERE id = $1 RETURNING *", [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Servicio no encontrado" });
+    }
+
+    res.status(200).json({ message: "Servicio eliminado con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar servicio:", error);
+    res.status(500).json({ error: "Error al eliminar el servicio" });
+  }
+});
+
 
 // Iniciar el servidor
 app.listen(PORT, () => {

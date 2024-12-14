@@ -153,6 +153,7 @@
             <h3>${service.name}</h3>
             <img src="${service.image_url}" alt="${service.name}" class="service-image">
             <p>${service.description}</p>
+            <button onclick="deleteService('${service.id}')">Eliminar</button>
           `;
           servicesList.appendChild(li);
         });
@@ -178,6 +179,7 @@
             <h3>${component.name}</h3>
             <img src="${component.image_url}" alt="${component.name}" class="component-image">
             <p>${component.description}</p>
+            <button onclick="deleteComponent('${component.id}')">Eliminar</button>
           `;
           componentsList.appendChild(li);
         });
@@ -240,6 +242,67 @@
         message.style.color = 'red';
       }
     });
+
+    // Función para eliminar un servicio
+    async function deleteService(id) {
+      const response = await fetch(`http://localhost:3000/api/services/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        loadServices();
+      } else {
+        alert('Error al eliminar el servicio');
+      }
+    }
+ç
+async function deleteService(id) {
+  const token = localStorage.getItem('authToken');
+  console.log('Token:', token); // Verifica que el token no esté vacío o nulo
+
+  if (!token) {
+    alert('No se ha encontrado un token de autenticación.');
+    return;
+  }
+
+  const response = await fetch(`http://localhost:3000/api/services/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`, // Incluye el token en los headers
+    },
+  });
+
+  if (response.ok) {
+    loadServices();
+  } else {
+    alert('Error al eliminar el servicio');
+  }
+}
+    // Función para eliminar un componente
+async function deleteComponent(id) {
+  const token = localStorage.getItem('authToken');
+  console.log('Token:', token); // Verifica que el token no esté vacío o nulo
+
+  if (!token) {
+    alert('No se ha encontrado un token de autenticación.');
+    return;
+  }
+
+  const response = await fetch(`http://localhost:3000/api/components/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`, // Incluye el token en los headers
+    },
+  });
+
+  if (response.ok) {
+    loadComponents(); // Llama a una función para recargar la lista de componentes después de eliminar
+  } else {
+    alert('Error al eliminar el componente');
+  }
+}
+
+
 
     // Cargar servicios y componentes al inicio
     window.addEventListener('DOMContentLoaded', function() {
