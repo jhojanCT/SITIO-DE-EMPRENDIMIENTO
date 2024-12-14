@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,16 +20,9 @@
       </div>
     </div>
   </header>
-
-  <nav class="tabs">
-    <button class="tab-button active" data-tab="services">Servicios</button>
-    <button class="tab-button" data-tab="components">Componentes</button>
-  </nav>
-
-  <main class="main-container">
-    <!-- Sección de Servicios -->
-    <section id="services" class="tab-content active">
-      <h2>Nuestros Servicios</h2>
+  <main class="services-container">
+    <section id="services">
+      <h2>Servicios</h2>
       <div id="services-list" class="cards-container">
         <!-- Los servicios se inyectarán aquí -->
       </div>
@@ -43,15 +35,10 @@
         <!-- Los productos se inyectarán aquí -->
       </div>
     </section>
-
-    <!-- Sección del Carrito -->
-    <section id="cart" class="tab-content">
-      <h2>Tu Carrito</h2>
-      <div id="cart-items" class="cards-container">
-        <!-- Los productos del carrito se inyectarán aquí -->
-      </div>
-      <div id="cart-total">
-        <p>Total: $<span id="total-amount">0</span></p>
+    <section id="products">
+      <h2>Productos</h2>
+      <div id="products-list" class="cards-container">
+        <!-- Aquí se inyectarán los productos dinámicamente -->
       </div>
     </section>
   </main>
@@ -191,8 +178,6 @@ function toggleCart() {
       fetchData('components', 'components-list');
     });
   </script>
-  <script src="scripts.js"></script>
-
 </body>
 
 </html>

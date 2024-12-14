@@ -27,24 +27,19 @@
         <button class="tab-button" data-tab="components">Componentes</button>
       </div>
 
-      <!-- Sección de Servicios -->
-      <section id="services" class="tab-content" aria-labelledby="services-heading">
+      <section id="services" aria-labelledby="services-heading">
         <h2 id="services-heading">Nuestros Servicios</h2>
         <p>Ofrecemos los siguientes servicios para mantener tu PC en óptimas condiciones:</p>
-        <ul id="services-list"></ul>
+        <ul id="services-list">
+          <li>Soporte Técnico de PC</li>
+          <li>Optimización de Sistemas</li>
+          <li>Venta de Componentes</li>
+        </ul>
       </section>
 
-      <!-- Sección de Componentes -->
-      <section id="components" class="tab-content" aria-labelledby="components-heading" style="display:none;">
-        <h2 id="components-heading">Componentes Disponibles</h2>
-        <p>Consulta los mejores componentes para tu PC:</p>
-        <ul id="components-list"></ul>
-      </section>
-
-      <!-- Añadir nuevo servicio -->
       <section id="add-service" aria-labelledby="add-service-heading">
         <h2 id="add-service-heading">Añadir Nuevo Servicio</h2>
-        <form id="service-form" action="http://localhost:3000/api/services" method="POST" enctype="multipart/form-data"> 
+        <form id="service-form" enctype="multipart/form-data">
           <div class="form-group">
             <label for="service-name">Nombre del Servicio:</label>
             <input type="text" id="service-name" name="service-name" placeholder="Ejemplo: Reparación de Laptop" required>
@@ -62,40 +57,17 @@
           
           <button type="submit">Añadir Servicio</button>
         </form>
-        <div id="form-message"></div>
       </section>
 
-      <!-- Añadir nuevo componente -->
-      <section id="add-component" aria-labelledby="add-component-heading">
-        <h2 id="add-component-heading">Añadir Nuevo Componente</h2>
-        <form id="component-form" action="http://localhost:3000/api/components" method="POST" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="component-name">Nombre del Componente:</label>
-            <input type="text" id="component-name" name="component-name" placeholder="Ejemplo: Tarjeta Gráfica" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="component-description">Descripción:</label>
-            <textarea id="component-description" name="component-description" placeholder="Describe el componente" required></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="component-image">Subir Imagen del Componente:</label>
-            <input type="file" id="component-image" name="image" accept="image/*" required>
-          </div>
-          
-          <button type="submit">Añadir Componente</button>
-        </form>
-        <div id="component-form-message"></div>
-      </section>
-
-      <!-- Buscar servicio o componente -->
       <section id="search-service" aria-labelledby="search-service-heading">
-        <h2 id="search-service-heading">Buscar</h2>
-        <p>Encuentra rápidamente un servicio o componente que necesites:</p>
-        <input type="text" id="search-bar" placeholder="Buscar..." aria-label="Buscar">
-        <ul id="search-results"></ul>
+        <h2 id="search-service-heading">Buscar Servicios</h2>
+        <p>Encuentra rápidamente un servicio que necesites:</p>
+        <input type="text" id="search-bar" placeholder="Buscar servicio..." aria-label="Buscar servicios">
+        <ul id="search-results">
+   
+        </ul>
       </section>
+
     </div>
   </main>
 
@@ -107,7 +79,6 @@
         <ul>
           <li><a href="#services">Servicios</a></li>
           <li><a href="#add-service">Añadir Servicio</a></li>
-          <li><a href="#add-component">Añadir Componente</a></li>
           <li><a href="#search-service">Buscar</a></li>
         </ul>
       </nav>
