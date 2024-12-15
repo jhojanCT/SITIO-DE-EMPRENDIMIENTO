@@ -83,17 +83,18 @@ app.post("/api/components", upload.single("image"), async (req, res) => {
   try {
     const name = req.body['component-name'];
     const description = req.body['component-description'];
+    const price = req.body['component-price'];  // Obtener precio del cuerpo de la solicitud
     const image_url = req.file
       ? `http://localhost:${PORT}/uploads/${req.file.filename}`
       : null;
 
-    if (!name || !description) {
-      return res.status(400).json({ error: "Nombre y descripción son requeridos" });
+    if (!name || !description || !price) {
+      return res.status(400).json({ error: "Nombre, descripción y precio son requeridos" });
     }
 
     const result = await pool.query(
-      "INSERT INTO components (name, description, image_url) VALUES ($1, $2, $3) RETURNING *",
-      [name, description, image_url]
+      "INSERT INTO components (name, description, price, image_url) VALUES ($1, $2, $3, $4) RETURNING *",
+      [name, description, price, image_url]
     );
 
     res.status(201).json(result.rows[0]);
@@ -161,19 +162,18 @@ app.post("/api/services", upload.single("image"), async (req, res) => {
   try {
     const name = req.body['service-name'];
     const description = req.body['service-description'];
+    const price = req.body['service-price'];  // Obtener precio del cuerpo de la solicitud
     const image_url = req.file
       ? `http://localhost:${PORT}/uploads/${req.file.filename}`
       : null;
 
-    if (!name || !description) {
-      return res
-        .status(400)
-        .json({ error: "Nombre y descripción son requeridos" });
+    if (!name || !description || !price) {
+      return res.status(400).json({ error: "Nombre, descripción y precio son requeridos" });
     }
 
     const result = await pool.query(
-      "INSERT INTO services (name, description, image_url) VALUES ($1, $2, $3) RETURNING *",
-      [name, description, image_url]
+      "INSERT INTO services (name, description, price, image_url) VALUES ($1, $2, $3, $4) RETURNING *",
+      [name, description, price, image_url]
     );
 
     res.status(201).json(result.rows[0]);
@@ -182,6 +182,7 @@ app.post("/api/services", upload.single("image"), async (req, res) => {
     res.status(500).json({ error: "Error al añadir el servicio" });
   }
 });
+
 
 // Subir una imagen (opcional, si necesitas una ruta separada para subida)
 app.post("/api/services/upload", upload.single("image"), (req, res) => {

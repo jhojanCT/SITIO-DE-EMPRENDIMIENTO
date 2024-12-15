@@ -49,12 +49,17 @@
             <label for="service-name">Nombre del Servicio:</label>
             <input type="text" id="service-name" name="service-name" placeholder="Ejemplo: Reparación de Laptop" required>
           </div>
-          
+      
           <div class="form-group">
             <label for="service-description">Descripción:</label>
             <textarea id="service-description" name="service-description" placeholder="Describe el servicio" required></textarea>
           </div>
-
+      
+          <div class="form-group">
+            <label for="service-price">Precio:</label>
+            <input type="number" id="service-price" name="service-price" placeholder="Ejemplo: 100" step="0.01" required>
+          </div>
+      
           <div class="form-group">
             <label for="service-image">Subir Imagen del Servicio:</label>
             <input type="file" id="service-image" name="image" accept="image/*" required>
@@ -64,6 +69,7 @@
         </form>
         <div id="form-message"></div>
       </section>
+      
 
       <!-- Añadir nuevo componente -->
       <section id="add-component" aria-labelledby="add-component-heading">
@@ -78,7 +84,12 @@
             <label for="component-description">Descripción:</label>
             <textarea id="component-description" name="component-description" placeholder="Describe el componente" required></textarea>
           </div>
-
+      
+          <div class="form-group">
+            <label for="component-price">Precio:</label>
+            <input type="number" id="component-price" name="component-price" placeholder="Ejemplo: 200" step="0.01" required>
+          </div>
+      
           <div class="form-group">
             <label for="component-image">Subir Imagen del Componente:</label>
             <input type="file" id="component-image" name="image" accept="image/*" required>
@@ -88,7 +99,7 @@
         </form>
         <div id="component-form-message"></div>
       </section>
-
+      
       <!-- Buscar servicio o componente -->
       <section id="search-service" aria-labelledby="search-service-heading">
         <h2 id="search-service-heading">Buscar</h2>
@@ -191,62 +202,73 @@
 
     // Función para manejar el envío del formulario de servicios
     document.getElementById('service-form').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const form = event.target;
-      const formData = new FormData(form);
-      const message = document.getElementById('form-message');
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
+  const message = document.getElementById('form-message');
 
-      try {
-        const response = await fetch(form.action, {
-          method: form.method,
-          body: formData
-        });
-
-        if (response.ok) {
-          message.textContent = 'Servicio añadido exitosamente.';
-          message.style.color = 'green';
-          form.reset();
-          loadServices();
-        } else {
-          throw new Error('Error al añadir el servicio.');
-        }
-      } catch (error) {
-        message.textContent = error.message;
-        message.style.color = 'red';
-      }
+  try {
+    const response = await fetch(form.action, {
+      method: form.method,
+      body: formData
     });
 
-    // Función para manejar el envío del formulario de componentes
-    document.getElementById('component-form').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const form = event.target;
-      const formData = new FormData(form);
-      const message = document.getElementById('component-form-message');
+    if (response.ok) {
+      message.textContent = 'Servicio añadido exitosamente.';
+      message.style.color = 'green';
+      form.reset();
+      loadServices();
+    } else {
+      throw new Error('Error al añadir el servicio.');
+    }
+  } catch (error) {
+    message.textContent = error.message;
+    message.style.color = 'red';
+  }
+});
 
-      try {
-        const response = await fetch(form.action, {
-          method: form.method,
-          body: formData
-        });
+document.getElementById('component-form').addEventListener('submit', async function(event) {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
+  const message = document.getElementById('component-form-message');
 
-        if (response.ok) {
-          message.textContent = 'Componente añadido exitosamente.';
-          message.style.color = 'green';
-          form.reset();
-          loadComponents();
-        } else {
-          throw new Error('Error al añadir el componente.');
-        }
-      } catch (error) {
-        message.textContent = error.message;
-        message.style.color = 'red';
-      }
+  try {
+    const response = await fetch(form.action, {
+      method: form.method,
+      body: formData
     });
+
+    if (response.ok) {
+      message.textContent = 'Componente añadido exitosamente.';
+      message.style.color = 'green';
+      form.reset();
+      loadComponents();
+    } else {
+      throw new Error('Error al añadir el componente.');
+    }
+  } catch (error) {
+    message.textContent = error.message;
+    message.style.color = 'red';
+  }
+});
+
 
     // Función para eliminar un servicio
     async function deleteService(id) {
+      const token = localStorage.getItem('authToken');
+      console.log('Token:', token);
+
+      if (!token) {
+        alert('No se ha encontrado un token de autenticación.');
+        return;
+      }
+
       const response = await fetch(`http://localhost:3000/api/services/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
@@ -255,54 +277,30 @@
         alert('Error al eliminar el servicio');
       }
     }
-ç
-async function deleteService(id) {
-  const token = localStorage.getItem('authToken');
-  console.log('Token:', token); // Verifica que el token no esté vacío o nulo
 
-  if (!token) {
-    alert('No se ha encontrado un token de autenticación.');
-    return;
-  }
-
-  const response = await fetch(`http://localhost:3000/api/services/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`, // Incluye el token en los headers
-    },
-  });
-
-  if (response.ok) {
-    loadServices();
-  } else {
-    alert('Error al eliminar el servicio');
-  }
-}
     // Función para eliminar un componente
-async function deleteComponent(id) {
-  const token = localStorage.getItem('authToken');
-  console.log('Token:', token); // Verifica que el token no esté vacío o nulo
+    async function deleteComponent(id) {
+      const token = localStorage.getItem('authToken');
+      console.log('Token:', token);
 
-  if (!token) {
-    alert('No se ha encontrado un token de autenticación.');
-    return;
-  }
+      if (!token) {
+        alert('No se ha encontrado un token de autenticación.');
+        return;
+      }
 
-  const response = await fetch(`http://localhost:3000/api/components/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`, // Incluye el token en los headers
-    },
-  });
+      const response = await fetch(`http://localhost:3000/api/components/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
-  if (response.ok) {
-    loadComponents(); // Llama a una función para recargar la lista de componentes después de eliminar
-  } else {
-    alert('Error al eliminar el componente');
-  }
-}
-
-
+      if (response.ok) {
+        loadComponents();
+      } else {
+        alert('Error al eliminar el componente');
+      }
+    }
 
     // Cargar servicios y componentes al inicio
     window.addEventListener('DOMContentLoaded', function() {

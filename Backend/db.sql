@@ -67,11 +67,11 @@ CREATE TABLE components (
 );
 
 -- Insertar algunos componentes de ejemplo
-INSERT INTO components (name, description, price, stock_quantity)
+INSERT INTO components (name, description, price)
 VALUES 
-  ('Procesador Intel i7', 'Procesador de 8 núcleos y 16 hilos, ideal para juegos y tareas de alto rendimiento.', 300.00, 50),
-  ('Tarjeta Gráfica Nvidia RTX 3060', 'Tarjeta gráfica de alto rendimiento para juegos y edición de video.', 500.00, 30),
-  ('Placa Base ASUS B450', 'Placa base compatible con procesadores AMD Ryzen, ideal para gamers y entusiastas.', 120.00, 40);
+  ('Procesador Intel i7', 'Procesador de 8 núcleos y 16 hilos, ideal para juegos y tareas de alto rendimiento.', 300.00),
+  ('Tarjeta Gráfica Nvidia RTX 3060', 'Tarjeta gráfica de alto rendimiento para juegos y edición de video.', 500.00,
+  ('Placa Base ASUS B450', 'Placa base compatible con procesadores AMD Ryzen, ideal para gamers y entusiastas.', 120.00);
 
 -- Crear una función para actualizar la fecha de actualización
 CREATE OR REPLACE FUNCTION update_timestamp()
